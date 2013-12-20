@@ -1,5 +1,6 @@
 (function() {
   var vexDialogFactory;
+
   vexDialogFactory = function($, vex) {
     var $formToObject, dialog;
     if (vex == null) {
@@ -38,11 +39,7 @@
       }
     };
     dialog.defaultOptions = {
-      callback: function(value) {
-        if (console && console.log) {
-          return console.log('Vex dialog callback:', value);
-        }
-      },
+      callback: function(value) {},
       afterOpen: function() {},
       message: 'Message',
       input: "<input name=\"vex\" type=\"hidden\" value=\"_vex-empty-value\" />",
@@ -76,7 +73,7 @@
       };
       $vexContent = vex.open(options);
       if (options.focusFirstInput) {
-        $vexContent.find('input[type="text"], input[type="submit"]').first().focus();
+        $vexContent.find('input[type="submit"], textarea, input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"]').first().focus();
       }
       return $vexContent;
     };
@@ -103,7 +100,7 @@
       }
       defaultPromptOptions = {
         message: "<label for=\"vex\">" + (options.label || 'Prompt:') + "</label>",
-        input: "<input name=\"vex\" type=\"text\" class=\"vex-dialog-prompt-input\" placeholder=\"" + (options.placeholder || '') + "\" />"
+        input: "<input name=\"vex\" type=\"text\" class=\"vex-dialog-prompt-input\" placeholder=\"" + (options.placeholder || '') + "\"  value=\"" + (options.value || '') + "\" />"
       };
       options = $.extend({}, defaultPromptOptions, options);
       return dialog.open(options);
@@ -117,7 +114,7 @@
       return $form;
     };
     dialog.getFormValueOnSubmit = function(formData) {
-      if (formData.vex) {
+      if (formData.vex || formData.vex === '') {
         if (formData.vex === '_vex-empty-value') {
           return true;
         }
@@ -140,6 +137,7 @@
     };
     return dialog;
   };
+
   if (typeof define === 'function' && define.amd) {
     define(['jquery', 'vex'], vexDialogFactory);
   } else if (typeof exports === 'object') {
@@ -147,4 +145,5 @@
   } else {
     window.vex.dialog = vexDialogFactory(window.jQuery, window.vex);
   }
+
 }).call(this);
